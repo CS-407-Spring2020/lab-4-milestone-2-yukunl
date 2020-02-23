@@ -54,18 +54,20 @@ public class MainActivity extends AppCompatActivity {
 
             }
         };
+
         startListening();
+
         if (Build.VERSION.SDK_INT >= 23 &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        }else{
-            locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
-            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (location != null) {
-                updateLocationInfo(location);
-            }
+        }
+
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
+        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (location != null) {
+            updateLocationInfo(location);
         }
 
     }
@@ -107,34 +109,36 @@ public class MainActivity extends AppCompatActivity {
 
         try{
             String address = "Could not find address";
-            List<Address> listAdresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
+            List<Address> listAddresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
 
 
-            if(listAdresses!=null && listAdresses.size()>0){
-                Log.i("Placeinfo",listAdresses.get(0).toString());
+            if(listAddresses!=null && listAddresses.size()>0) {
+
+                Log.i("PlaceInfo",listAddresses.get(0).toString());
                 address = "Address: \n";
 
-                if(listAdresses.get(0).getSubThoroughfare() != null){
-                    address += listAdresses.get(0).getSubThoroughfare()+" ";
+                if(listAddresses.get(0).getSubThoroughfare() != null){
+                    address += listAddresses.get(0).getSubThoroughfare()+" ";
 
                 }
-                if(listAdresses.get(0).getThoroughfare() != null){
-                    address += listAdresses.get(0).getThoroughfare()+"\n";
+                if(listAddresses.get(0).getThoroughfare() != null){
+                    address += listAddresses.get(0).getThoroughfare()+"\n";
 
                 }
-                if(listAdresses.get(0).getLocality() != null){
-                    address += listAdresses.get(0).getLocality()+"\n";
+                if(listAddresses.get(0).getLocality() != null){
+                    address += listAddresses.get(0).getLocality()+"\n";
 
                 }
-                if(listAdresses.get(0).getPostalCode() != null){
-                    address += listAdresses.get(0).getPostalCode()+"\n";
+                if(listAddresses.get(0).getPostalCode() != null){
+                    address += listAddresses.get(0).getPostalCode()+"\n";
 
                 }
-                if(listAdresses.get(0).getCountryName() != null){
-                    address += listAdresses.get(0).getCountryName()+"\n";
+                if(listAddresses.get(0).getCountryName() != null){
+                    address += listAddresses.get(0).getCountryName()+"\n";
 
                 }
             }
+            Log.i("beforetextview",address);
             TextView addressTextView = (TextView) findViewById(R.id.Address);
             addressTextView.setText(address);
 
